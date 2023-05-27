@@ -13,7 +13,7 @@ stages:
     - script: echo Hello, world!
       displayName: 'Run a one-line script'  
       
-- stage: Deploy Dev
+- stage: DeployDev
   dependsOn: Build
   jobs:
   - job: StartDeploy
@@ -26,7 +26,7 @@ stages:
     - bash: echo "Deployment is complete!"
       displayName: 'Running the deployment stage'
 
-- stage: Deploy QA
+- stage: DeployQA
   dependsOn: Build
   jobs:
   - job: StartDeploy
