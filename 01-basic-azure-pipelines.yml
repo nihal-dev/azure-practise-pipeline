@@ -17,6 +17,10 @@ stages:
   jobs:
   - job:
     steps:
+    - script: echo "Starting with the deployment"
+      displayName: "Start the deployment!"
+  - job:
+    steps:
     - bash: echo "Deployment is complete!"
       displayName: 'Running the deployment stage'
 
