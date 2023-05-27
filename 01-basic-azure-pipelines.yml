@@ -13,18 +13,19 @@ stages:
     - script: echo Hello, world! $(TestVariable)
       displayName: 'Run a one-line script'  
       
-# - stage: DeployDev
-#   dependsOn: Build
-#   jobs:
-#   - job: StartDeploy
-#     steps:
-#     - script: echo "Starting with the deployment"
-#       displayName: "Start the deployment!"
-#   - job: CompleteDeploy
-#     dependsOn: StartDeploy
-#     steps:
-#     - bash: echo "Deployment is complete!"
-#       displayName: 'Running the deployment stage'
+- stage: DeployDev
+  variables:
+    environment: Dev
+  jobs:
+  - job: StartDeploy
+    steps:
+    - script: echo "Starting with the deployment in $(environment)"
+      displayName: "Start the deployment!"
+  - job: CompleteDeploy
+    dependsOn: StartDeploy
+    steps:
+    - bash: echo "Deployment is complete in $(environment)!"
+      displayName: 'Running the deployment stage'
 
 # - stage: DeployQA
 #   dependsOn: Build
