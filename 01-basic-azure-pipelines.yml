@@ -13,7 +13,10 @@ stages:
     - script: echo Hello, world! $(TestVariable)
       displayName: 'Run a one-line script'
     - bash: echo $(Build.BuildNumber)
-      
+    - bash: echo $(Build.BuildId)
+    - bash: echo $(Build.SourcesDirectory)
+    - bash: echo $(Build.ArtifactStaging)
+    
 # - stage: DeployDev
 #   variables:
 #     environment: Dev
