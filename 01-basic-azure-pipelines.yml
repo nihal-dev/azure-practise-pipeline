@@ -15,11 +15,12 @@ stages:
       
 - stage: Deploy
   jobs:
-  - job:
+  - job: StartDeploy
     steps:
     - script: echo "Starting with the deployment"
       displayName: "Start the deployment!"
-  - job:
+  - job: CompleteDeploy
+    dependsOn: StartDeploy
     steps:
     - bash: echo "Deployment is complete!"
       displayName: 'Running the deployment stage'
