@@ -16,6 +16,7 @@ stages:
     - bash: echo $(Build.BuildId)
     - bash: echo $(Build.SourcesDirectory)
     - bash: echo $(Build.ArtifactStagingDirectory)
+    - bash: echo $(System.DefaultWorkingDirectory)
     
 # - stage: DeployDev
 #   variables:
