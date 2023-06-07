@@ -17,11 +17,18 @@ stages:
     - bash: ls -l $(System.DefaultWorkingDirectory)
     
     - task: CopyFiles@2
+      displayName: Copy files to staging directory
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: 'Dockerfile'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - bash: ls -l $(Build.ArtifactStagingDirectory)
+    - task: PublishBuildArtifacts@1
+      displayName: Publish the artifacts to DeployDev stage
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifest'
+        publishLocation: 'Container'
     
 - stage: DeployDev
   jobs:
