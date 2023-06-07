@@ -10,27 +10,24 @@ stages:
   jobs:
   - job:
     steps:
-    - script: echo Hello, world! $(TestVariable)
-      displayName: 'Run a one-line script'
     - bash: echo $(Build.BuildNumber)
     - bash: echo $(Build.BuildId)
     - bash: ls -l $(Build.SourcesDirectory)
     - bash: ls -l $(Build.ArtifactStagingDirectory)
     - bash: ls -l $(System.DefaultWorkingDirectory)
     
-# - stage: DeployDev
-#   variables:
-#     environment: Dev
-#   jobs:
-#   - job: StartDeploy
-#     steps:
-#     - script: echo "Starting with the deployment in $(environment)"
-#       displayName: "Start the deployment!"
-#   - job: CompleteDeploy
-#     dependsOn: StartDeploy
-#     steps:
-#     - bash: echo "Deployment is complete in $(environment)!"
-#       displayName: 'Running the deployment stage'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: 'Dockerfile'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - bash: ls -l $(Build.ArtifactStagingDirectory)
+    
+- stage: DeployDev
+  jobs:
+  - job: StartDeploy
+    steps:
+    - bash: ls -l $(Build.ArtifactStagingDirectory)
 
 # - stage: DeployQA
 #   dependsOn: Build
