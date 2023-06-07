@@ -34,7 +34,14 @@ stages:
   jobs:
   - job: StartDeploy
     steps:
-    - bash: ls -l $(Build.ArtifactStagingDirectory)
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'manifest'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+
 
 # - stage: DeployQA
 #   dependsOn: Build
