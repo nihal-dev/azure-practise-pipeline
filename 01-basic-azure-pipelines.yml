@@ -14,9 +14,9 @@ stages:
       displayName: 'Run a one-line script'
     - bash: echo $(Build.BuildNumber)
     - bash: echo $(Build.BuildId)
-    - bash: echo $(Build.SourcesDirectory)
-    - bash: echo $(Build.ArtifactStagingDirectory)
-    - bash: echo $(System.DefaultWorkingDirectory)
+    - bash: ls -l $(Build.SourcesDirectory)
+    - bash: ls -l $(Build.ArtifactStagingDirectory)
+    - bash: ls -l $(System.DefaultWorkingDirectory)
     
 # - stage: DeployDev
 #   variables:
