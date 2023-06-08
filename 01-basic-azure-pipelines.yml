@@ -30,7 +30,7 @@ stages:
         containerRegistry: 'docker-hub-connection'
         repository: 'nihals'
         command: 'build'
-        Dockerfile: '$(Build.ArtifactStagingDirectory)'
+        Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
         tags: $(Build.BuildId)
 
     - script: docker image ls
