@@ -6,41 +6,59 @@ pool:
 
 
 stages:
-- stage: Build
+- stage: BuildImage
   jobs:
   - job:
     steps:
-    - bash: echo $(Build.BuildNumber)
-    - bash: echo $(Build.BuildId)
-    - bash: ls -l $(Build.SourcesDirectory)
-    - bash: ls -l $(Build.ArtifactStagingDirectory)
-    - bash: ls -l $(System.DefaultWorkingDirectory)
+    # - bash: echo $(Build.BuildNumber)
+    # - bash: echo $(Build.BuildId)
+    # - bash: ls -l $(Build.SourcesDirectory)
+    # - bash: ls -l $(Build.ArtifactStagingDirectory)
+    # - bash: ls -l $(System.DefaultWorkingDirectory)
     
     - task: CopyFiles@2
-      displayName: Copy files to staging directory
+      displayName: Copy Dockerfile to staging directory
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: 'Dockerfile/*'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - bash: ls -l $(Build.ArtifactStagingDirectory)
-    - task: PublishBuildArtifacts@1
-      displayName: Publish the artifacts to DeployDev stage
+
+    - task: Docker@2
+      displayName: Building Docker Image
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'manifest'
-        publishLocation: 'Container'
+        containerRegistry: 'docker-hub-connection'
+        repository: 'nihals'
+        command: 'build'
+        Dockerfile: '$(Build.ArtifactStagingDirectory)'
+        buildContext: '$(Build.ArtifactStagingDirectory)'
+        tags: $(Build.BuildId)
+
+    - script: docker image ls
+
+    # - task: PublishBuildArtifacts@1
+    #   displayName: Publish the artifacts to DeployDev stage
+    #   inputs:
+    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    #     ArtifactName: 'manifest'
+    #     publishLocation: 'Container'
     
-- stage: DeployDev
-  jobs:
-  - job: StartDeploy
-    steps:
-    - task: DownloadBuildArtifacts@1
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'manifest'
-        downloadPath: '$(System.ArtifactsDirectory)'
-        cleanDestinationFolder: true
+# - stage: DeployDev
+#   jobs:
+#   - job: StartDeploy
+#     steps:
+#     - task: DownloadBuildArtifacts@1
+#       inputs:
+#         buildType: 'current'
+#         downloadType: 'single'
+#         artifactName: 'manifest'
+#         downloadPath: '$(System.ArtifactsDirectory)'
+#         cleanDestinationFolder: true
+#     - task: Docker@2
+#       inputs:
+#         containerRegistry: 'docker-hub-connection'
+#         repository: 'nihals'
+#         command: 'push'
 
 
 # - stage: DeployQA
