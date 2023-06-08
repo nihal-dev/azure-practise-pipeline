@@ -20,7 +20,7 @@ stages:
       displayName: Copy files to staging directory
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: 'Dockerfile'
+        Contents: 'Dockerfile/*'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - bash: ls -l $(Build.ArtifactStagingDirectory)
     - task: PublishBuildArtifacts@1
