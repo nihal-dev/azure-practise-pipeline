@@ -28,7 +28,7 @@ stages:
       displayName: Building Docker Image
       inputs:
         containerRegistry: 'docker-hub-connection'
-        repository: 'nihals'
+        repository: 'nihals/azure-nginx'
         command: 'build'
         Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
         tags: $(Build.BuildId)
