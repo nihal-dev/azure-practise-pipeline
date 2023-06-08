@@ -19,8 +19,8 @@ stages:
     - task: CopyFiles@2
       displayName: Copy Dockerfile to staging directory
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: 'Dockerfile/*'
+        SourceFolder: '$(System.DefaultWorkingDirectory)/Dockerfile'
+        Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
     - bash: ls -l $(Build.ArtifactStagingDirectory)
 
@@ -30,7 +30,7 @@ stages:
         containerRegistry: 'docker-hub-connection'
         repository: 'nihals'
         command: 'build'
-        Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
+        Dockerfile: '$(Build.ArtifactStagingDirectory)'
         tags: $(Build.BuildId)
 
     - script: docker image ls
