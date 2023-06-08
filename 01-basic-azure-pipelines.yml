@@ -7,8 +7,6 @@ pool:
 
 stages:
 - stage: BuildImage
-  variables:
-    docker-repo: nihals
   jobs:
   - job:
     steps:
@@ -28,6 +26,8 @@ stages:
 
     - task: Docker@2
       displayName: Building Docker Image
+      env:
+        docker-repo: 'nihals'
       inputs:
         containerRegistry: 'docker-hub-connection'
         repository: '$(docker-repo)/azure-nginx'
