@@ -32,7 +32,8 @@ stages:
         Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
         addPipelineData: false
         addBaseImageData: false
-
+    
+    - script: docker images tag ***/azure-nginx:$(Build.BuildId) nihals/azure-nginx:$(Build.BuildId)
     - script: docker image ls
 
     # - task: PublishBuildArtifacts@1
