@@ -36,29 +36,33 @@ stages:
     - script: docker save nihals/azure-nginx:$(Build.BuildId) -o $(Build.ArtifactStagingDirectory)/azure-nginx.tar
     - script: ls -l $(Build.ArtifactStagingDirectory)
 
-    # - task: PublishBuildArtifacts@1
-    #   displayName: Publish the artifacts to DeployDev stage
-    #   inputs:
-    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    #     ArtifactName: 'manifest'
-    #     publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish the artifacts to DeployImage stage
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifest'
+        publishLocation: 'Container'
     
-# - stage: DeployDev
-#   jobs:
-#   - job: StartDeploy
-#     steps:
-#     - task: DownloadBuildArtifacts@1
-#       inputs:
-#         buildType: 'current'
-#         downloadType: 'single'
-#         artifactName: 'manifest'
-#         downloadPath: '$(System.ArtifactsDirectory)'
-#         cleanDestinationFolder: true
-#     - task: Docker@2
-#       inputs:
-#         containerRegistry: 'docker-hub-connection'
-#         repository: 'nihals'
-#         command: 'push'
+- stage: DeployImage
+  jobs:
+  - job: StartDeploy
+    steps:
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'manifest'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        cleanDestinationFolder: true
+
+    - script: ls -l $(System.ArtifactsDirectory)
+    - script: docker load -i $(System.ArtifactsDirectory)/manifest/azure-nginx.tar
+    - script: docker image ls
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'docker-hub-connection'
+    #     repository: 'nihals'
+    #     command: 'push'
 
 
 # - stage: DeployQA
