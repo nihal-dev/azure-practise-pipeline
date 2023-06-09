@@ -32,9 +32,10 @@ stages:
         Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
         addPipelineData: false
         addBaseImageData: false
+        tags: $(Build.BuildId)
     
+    #Save the image to tar file
     - script: docker save nihals/azure-nginx:$(Build.BuildId) -o $(Build.ArtifactStagingDirectory)/azure-nginx.tar
-    - script: ls -l $(Build.ArtifactStagingDirectory)
 
     - task: PublishBuildArtifacts@1
       displayName: Publish the artifacts to DeployImage stage
@@ -55,25 +56,13 @@ stages:
         downloadPath: '$(System.ArtifactsDirectory)'
         cleanDestinationFolder: true
 
-    - script: ls -l $(System.ArtifactsDirectory)
+    #Load the image to the new agent from the archive file
     - script: docker load -i $(System.ArtifactsDirectory)/manifest/azure-nginx.tar
-    - script: docker image ls
-    # - task: Docker@2
-    #   inputs:
-    #     containerRegistry: 'docker-hub-connection'
-    #     repository: 'nihals'
-    #     command: 'push'
 
 
-# - stage: DeployQA
-#   dependsOn: Build
-#   jobs:
-#   - job: StartDeploy
-#     steps:
-#     - script: echo "Starting with the deployment"
-#       displayName: "Start the deployment!"
-#   - job: CompleteDeploy
-#     dependsOn: StartDeploy
-#     steps:
-#     - bash: echo "Deployment is complete!"
-#       displayName: 'Running the deployment stage'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'docker-hub-connection'
+        repository: 'nihals/azure-nginx'
+        command: 'push'
+        tags: $(Build.BuildId)
